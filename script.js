@@ -2,7 +2,10 @@ const input = document.getElementById('task-input');
 const btn = document.getElementById('add-btn');
 const list = document.getElementById('task-list');
 const counter = document.getElementById('counter');
-
+const finish = document.getElementById('completed-tasks');
+const delDone = document.getElementById('delDone');
+const delAll = document.getElementById('delAll')
+var currentNum = 0
 
 btn.addEventListener('click', function() {
     addTask();
@@ -27,6 +30,12 @@ function addTask() {
     span.className = "list-object";
     span.addEventListener('click', function() {
         li.classList.toggle('completed');
+        if (li.classList.contains('completed')) {
+            finish.appendChild(li);
+        } else {
+            list.appendChild(li);
+        }
+            
         saveTasks();
         updateCounter();
     });
@@ -38,13 +47,37 @@ function addTask() {
         updateCounter();
     });
 
+    delAll.addEventListener('click', function() {
+        const allTasks = document.querySelectorAll('li');
+        allTasks.forEach(function(item) {
+            item.remove();
+            saveTasks();
+        });
+    });
+
+    delDone.addEventListener('click', function() {
+        li.classList.forEach(function(done) {
+            li.remove(done);
+        })        
+    })
+
     li.appendChild(span)
     li.appendChild(deleteBtn)
     list.appendChild(li);
     saveTasks();
     updateCounter();
+    frogText(span);
     
     input.value = '';
+}
+
+function frogText(span) {
+    currentNum = currentNum + 1
+    console.log(currentNum)
+    if (currentNum === 5) {
+        currentNum = 0
+        span.textContent = "🐸 Frog 🐸"
+    }
 }
 
 function updateCounter() {
